@@ -89,6 +89,20 @@ sbus_init(const char *device, bool singlewire)
 {
 	int sbus_fd = open(device, O_RDWR | O_NONBLOCK);
 
+	int ret = sbus_config(sbus_fd, singlewire);
+
+	if (!ret) {
+		return sbus_fd;
+	} else {
+		return -1;
+	}
+}
+
+int
+sbus_config(int sbus_fd, bool singlewire)
+{
+	int ret = -1;
+
 	if (sbus_fd >= 0) {
 		struct termios t;
 
@@ -100,7 +114,7 @@ sbus_init(const char *device, bool singlewire)
 
 		if (singlewire) {
 			/* only defined in configs capable of IOCTL */
-#ifdef SBUS_SERIAL_PORT
+#ifdef TIOCSSINGLEWIRE
 			ioctl(uart, TIOCSSINGLEWIRE, SER_SINGLEWIRE_ENABLED);
 #endif
 		}
@@ -109,9 +123,10 @@ sbus_init(const char *device, bool singlewire)
 		partial_frame_count = 0;
 		last_rx_time = hrt_absolute_time();
 
+		ret = 0;
 	}
 
-	return sbus_fd;
+	return ret;
 }
 
 void
