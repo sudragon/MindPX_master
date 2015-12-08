@@ -72,6 +72,10 @@ endif
 # make px4fmu-v2_default upload 	(builds and uploads)
 # make px4fmu-v2_default test 		(builds and tests)
 #
+# make mindpx-v2_default		(builds)
+# make mindpx-v2_default upload		(builds and uploads)
+# make mindpx-v2_default test		(builds and tests)
+
 # This tells cmake to build the nuttx px4fmu-v2 default config in the
 # directory build_nuttx_px4fmu-v2_default and then call make
 # in that directory with the target upload.
@@ -126,6 +130,9 @@ endef
 
 px4fmu-v1_default:
 	$(call cmake-build,nuttx_px4fmu-v1_default)
+
+mindpx-v2_default:
+	$(call cmake-build,nuttx_mindpx-v2_default)
 
 px4fmu-v2_default:
 	$(call cmake-build,nuttx_px4fmu-v2_default)

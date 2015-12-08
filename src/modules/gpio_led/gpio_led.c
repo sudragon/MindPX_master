@@ -94,6 +94,12 @@ int gpio_led_main(int argc, char *argv[])
 		     "\t-p <n>\tUse specified AUX OUT pin number (default: 1)"
 		    );
 #endif
+#if defined(CONFIG_ARCH_BOARD_MINDPX_V2)
+                errx(1, "usage: gpio_led {start|stop} [-p <n>]\n"
+                     "\t-p <n>\tUse specified AUX OUT pin number (default: 1)"
+                    );
+#endif
+
 
 	} else {
 
@@ -114,6 +120,11 @@ int gpio_led_main(int argc, char *argv[])
 #if defined(CONFIG_ARCH_BOARD_PX4FMU_V2) || defined(CONFIG_ARCH_BOARD_PX4FMU_V4)
 			char pin_name[] = "AUX OUT 1";
 #endif
+
+#if defined(CONFIG_ARCH_BOARD_MINDPX_V2)
+                        char pin_name[] = "AUX OUT 1";
+#endif
+
 
 			if (argc > 2) {
 				if (!strcmp(argv[2], "-p")) {
@@ -167,6 +178,33 @@ int gpio_led_main(int argc, char *argv[])
 					}
 
 #endif
+#if defined(CONFIG_ARCH_BOARD_PX4FMU_V2) || defined(CONFIG_ARCH_BOARD_PX4FMU_V4)
+                                        unsigned int n = strtoul(argv[3], NULL, 10);
+
+                                        if (n >= 1 && n <= 6) {
+                                                use_io = false;
+                                                pin = 1 << (n - 1);
+                                                snprintf(pin_name, sizeof(pin_name), "AUX OUT %d", n);
+
+                                        } else {
+                                                errx(1, "unsupported pin: %s", argv[3]);
+                                        }
+
+#endif
+#if defined(CONFIG_ARCH_BOARD_MINDPX_V2) 
+                                        unsigned int n = strtoul(argv[3], NULL, 10);
+
+                                        if (n >= 1 && n <= 6) {
+                                                use_io = false;
+                                                pin = 1 << (n - 1);
+                                                snprintf(pin_name, sizeof(pin_name), "AUX OUT %d", n);
+
+                                        } else {
+                                                errx(1, "unsupported pin: %s", argv[3]);
+                                        }
+
+#endif
+
 				}
 			}
 
